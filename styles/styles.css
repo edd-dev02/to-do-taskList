@@ -1,0 +1,155 @@
+/*
+Nota: Recuerda añadir el normalize.css
+*/
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+  
+body {
+    font-size: 1.6rem;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.contenedor {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+ul, ol{
+    list-style: none;
+}
+
+a{
+    display: block;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+p a{
+    display: inline; /*Para que no se produzca un salto de línea*/
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+h1, h2, h3 {
+    margin: 0 0 2rem  0 ;
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+form, input, select, textarea, button, label{
+    font-family: inherit;
+    font-size: inherit;
+    display: block;
+    color: inherit;
+    border: none;
+
+}
+
+/****************************************************/
+
+h1 {
+    text-align: center;
+}
+
+.elements{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px){
+
+    .elements {
+        flex-direction: row;
+        justify-content: center;
+
+    }
+
+}
+
+#formulario input[type="text"],
+#formulario input[type="submit"] {
+    padding: 1rem 0.8rem;
+    border-radius: 8px;
+}
+
+@media (min-width: 768px){
+    #formulario input[type="text"] {
+        padding: 1rem 2.8rem;
+    }
+
+    #formulario input[type="submit"] {
+        padding: 1rem 1rem;
+    }
+}
+
+#formulario input[type="text"] {
+    border: 1px solid #ccc;
+}
+
+#formulario input[type="submit"] {
+    background-color: rgb(25, 131, 238);
+    color: aliceblue;
+    font-weight: 500;
+    transition: background-color 300ms ease-in-out
+}
+
+#formulario input[type="submit"]:hover {
+    background-color: rgb(63, 156, 249);
+}
+
+.error-container {
+    display: flex;
+    justify-content: center;
+}
+
+.error {
+    font-size: 2rem;
+    border: 1.5px solid red;
+    background-color: rgb(217, 68, 68);
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+    padding: 0.5rem 1.2rem;
+}
+
+.task-box {
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 3.5rem;
+
+}
+
+.task-textElement {
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.task-closeElement {
+    background-color: red;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.8rem;
+    cursor: pointer;
+    font-weight: 700;
+}
