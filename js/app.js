@@ -6,7 +6,7 @@ let tasks = [];
 // Eventos
 eventListeners();
 
-function eventListeners () {
+function eventListeners() {
     formulario.addEventListener("submit", addTask);
 
     // Load localStorage when DOM is ready
@@ -16,12 +16,12 @@ function eventListeners () {
     });
 }
 
-function addTask (e) {
+function addTask(e) {
     e.preventDefault();
 
     const formTask = document.getElementById("task").value;
 
-    if(formTask.trim() === "") {
+    if (formTask.trim() === "") {
         showError("A task cannot be empty", e.target.parentElement);
         return;
     }
@@ -29,6 +29,7 @@ function addTask (e) {
     // Passed validation
     const taskObj = {
         id: Date.now(),
+        status: false,
         formTask
     }
 
@@ -37,16 +38,16 @@ function addTask (e) {
     createHTML();
 
     formulario.reset();
-    
+
 
 }
 
-function showError (error, reference) {
-    
+function showError(error, reference) {
+
     // Delete error message if already exists
     const message = reference.querySelector(".error-container");
 
-    if(message) {
+    if (message) {
         message.remove();
     }
 
@@ -73,7 +74,7 @@ function createHTML() {
     // avoid repeated tasks
     cleanHTML();
 
-    if(tasks.length > 0) {
+    if (tasks.length > 0) {
 
         const taskBox = document.createElement("ul");
         taskBox.classList.add("task-box");
@@ -87,18 +88,39 @@ function createHTML() {
 
             const checkButton = document.createElement("input");
             checkButton.type = "checkbox";
+            checkButton.checked = task.status;
 
             const textElement = document.createElement("span");
             textElement.classList.add("task-textElement");
             textElement.textContent = task.formTask;
 
+            if(task.status) {
+                textElement.style.textDecoration = "line-through";
+            }
+
             const deleteButton = document.createElement("button");
             deleteButton.classList.add("task-closeElement");
             deleteButton.textContent = "X";
 
+            checkButton.onchange = () => {
+
+                if (checkButton.checked) {
+                    textElement.style.textDecoration = "line-through";
+                    task.status = true;
+                } else {
+                    textElement.style.textDecoration = "none";
+                    task.status = false;
+                }
+
+                // Save task status in localStorage
+                synchStorage();
+
+            }
+
             deleteButton.onclick = () => {
                 deleteTask(task.id);
             }
+
 
             li.appendChild(checkButton);
             li.appendChild(textElement);
@@ -113,20 +135,30 @@ function createHTML() {
     // Save tasks in localStorage
     synchStorage();
 
+    // Comprobar la propiedad status de todas las tareas
+    console.log(tasks);
+
 }
 
-function synchStorage () {
+function synchStorage() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function deleteTask (taskId) {
+function deleteTask(taskId) {
     tasks = tasks.filter(task => task.id !== taskId);
     createHTML();
 }
 
+function changeStatus(task) {
+
+    if (task.status === false) {
+    }
+
+}
+
 function cleanHTML() {
-    
-    while(list.firstChild) {
+
+    while (list.firstChild) {
         list.removeChild(list.firstChild);
     }
 

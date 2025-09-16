@@ -7,10 +7,12 @@ html {
     box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: inherit;
 }
-  
+
 body {
     font-size: 1.6rem;
     min-height: 100vh;
@@ -26,19 +28,22 @@ body {
     margin: 0 auto;
 }
 
-ul, ol{
+ul,
+ol {
     list-style: none;
 }
 
-a{
+a {
     display: block;
     text-decoration: none;
     font-family: inherit;
     font-size: inherit;
     color: inherit;
 }
-p a{
-    display: inline; /*Para que no se produzca un salto de línea*/
+
+p a {
+    display: inline;
+    /*Para que no se produzca un salto de línea*/
 }
 
 img {
@@ -46,15 +51,22 @@ img {
     display: block;
 }
 
-h1, h2, h3 {
-    margin: 0 0 2rem  0 ;
+h1,
+h2,
+h3 {
+    margin: 0 0 2rem 0;
 }
 
 h1 {
     font-size: 4rem;
 }
 
-form, input, select, textarea, button, label{
+form,
+input,
+select,
+textarea,
+button,
+label {
     font-family: inherit;
     font-size: inherit;
     display: block;
@@ -69,13 +81,42 @@ h1 {
     text-align: center;
 }
 
-.elements{
+.pendientes p {
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.n-pendientes {
+    color: rgb(255, 96, 48);
+}
+
+.n-completadas {
+    color: rgb(56, 157, 68);
+}
+
+@media (min-width: 768px) {
+    .pendientes {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3.5rem
+    }
+
+    .pendientes p:first-child{
+        text-align: right;
+    }
+
+    .pendientes p:last-child{
+        text-align: left;
+    }
+}
+
+.elements {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
 
     .elements {
         flex-direction: row;
@@ -91,7 +132,7 @@ h1 {
     border-radius: 8px;
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
     #formulario input[type="text"] {
         padding: 1rem 2.8rem;
     }
