@@ -74,16 +74,25 @@ function createHTML() {
     cleanHTML();
 
     if(tasks.length > 0) {
+
+        const taskBox = document.createElement("ul");
+        taskBox.classList.add("task-box");
+
         tasks.forEach(task => {
 
-            const taskBox = document.createElement("div");
-            taskBox.classList.add("task-box");
-
             const li = document.createElement("li");
-            li.classList.add("task-textElement");
-            li.textContent = task.formTask;
+            li.classList.add("task-items")
+            //li.classList.add("task-textElement");
+            //li.textContent = task.formTask;
 
-            const deleteButton = document.createElement("a");
+            const checkButton = document.createElement("input");
+            checkButton.type = "checkbox";
+
+            const textElement = document.createElement("span");
+            textElement.classList.add("task-textElement");
+            textElement.textContent = task.formTask;
+
+            const deleteButton = document.createElement("button");
             deleteButton.classList.add("task-closeElement");
             deleteButton.textContent = "X";
 
@@ -91,11 +100,14 @@ function createHTML() {
                 deleteTask(task.id);
             }
 
-            taskBox.appendChild(li);
-            taskBox.appendChild(deleteButton);
+            li.appendChild(checkButton);
+            li.appendChild(textElement);
+            li.appendChild(deleteButton);
 
-            list.appendChild(taskBox);
+            taskBox.appendChild(li);
         });
+
+        list.appendChild(taskBox);
     }
 
     // Save tasks in localStorage
