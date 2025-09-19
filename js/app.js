@@ -1,27 +1,30 @@
-// Variables
 const formulario = document.getElementById("formulario");
 const list = document.getElementById("list");
 let tasks = [];
 
-// Eventos
 eventListeners();
 
-function eventListeners () {
+function eventListeners() {
     formulario.addEventListener("submit", addTask);
 
     // Load localStorage when DOM is ready
     document.addEventListener("DOMContentLoaded", () => {
         tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
         createHTML();
+
+        // When the DOM loads, we pass the tasks array to check if there are any
+        updateCounter(tasks);
     });
 }
 
-function addTask (e) {
+function addTask(e) {
+
     e.preventDefault();
 
     const formTask = document.getElementById("task").value;
 
-    if(formTask.trim() === "") {
+    if (formTask.trim() === "") {
         showError("A task cannot be empty", e.target.parentElement);
         return;
     }
@@ -29,6 +32,7 @@ function addTask (e) {
     // Passed validation
     const taskObj = {
         id: Date.now(),
+        status: false,
         formTask
     }
 
@@ -37,16 +41,17 @@ function addTask (e) {
     createHTML();
 
     formulario.reset();
-    
+
+    updateCounter(tasks);
 
 }
 
-function showError (error, reference) {
-    
+function showError(error, reference) {
+
     // Delete error message if already exists
     const message = reference.querySelector(".error-container");
 
-    if(message) {
+    if (message) {
         message.remove();
     }
 
@@ -73,29 +78,69 @@ function createHTML() {
     // avoid repeated tasks
     cleanHTML();
 
-    if(tasks.length > 0) {
+    if (tasks.length > 0) {
+
+        const taskBox = document.createElement("ul");
+        taskBox.classList.add("task-box");
+
         tasks.forEach(task => {
 
-            const taskBox = document.createElement("div");
-            taskBox.classList.add("task-box");
-
             const li = document.createElement("li");
-            li.classList.add("task-textElement");
-            li.textContent = task.formTask;
+            li.classList.add("task-items")
 
-            const deleteButton = document.createElement("a");
+            const checkButton = document.createElement("input");
+            checkButton.type = "checkbox";
+            checkButton.checked = task.status;
+
+            const textElement = document.createElement("span");
+            textElement.classList.add("task-textElement");
+            textElement.textContent = task.formTask;
+
+            if (task.status) {
+                textElement.style.textDecoration = "line-through";
+            }
+
+            const deleteButton = document.createElement("button");
             deleteButton.classList.add("task-closeElement");
             deleteButton.textContent = "X";
 
-            deleteButton.onclick = () => {
-                deleteTask(task.id);
+            checkButton.onchange = () => {
+
+                if (checkButton.checked) {
+                    textElement.style.textDecoration = "line-through";
+                    task.status = true;
+
+                } else {
+                    textElement.style.textDecoration = "none";
+                    task.status = false;
+
+                }
+                // Save task status in localStorage
+                synchStorage();
+
+                // Update DOM Counter
+                const LS_tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                updateCounter(LS_tasks);
+
             }
 
-            taskBox.appendChild(li);
-            taskBox.appendChild(deleteButton);
+            deleteButton.onclick = () => {
+                deleteTask(task.id);
 
-            list.appendChild(taskBox);
+                // Update DOM Counter
+                const LS_tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                updateCounter(LS_tasks);
+            }
+
+
+            li.appendChild(checkButton);
+            li.appendChild(textElement);
+            li.appendChild(deleteButton);
+
+            taskBox.appendChild(li);
         });
+
+        list.appendChild(taskBox);
     }
 
     // Save tasks in localStorage
@@ -103,18 +148,43 @@ function createHTML() {
 
 }
 
-function synchStorage () {
+function synchStorage() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-function deleteTask (taskId) {
+function deleteTask(taskId) {
     tasks = tasks.filter(task => task.id !== taskId);
     createHTML();
 }
 
+function changeStatus(task) {
+
+    if (task.status === false) {
+    }
+
+}
+
+// Counter functionality
+function updateCounter(tasks) {
+
+    let tasksPending = [];
+    let tasksCompleted = [];
+
+    tasksPending = tasks.filter(task => task.status === false);
+
+    tasksCompleted = tasks.filter(task => task.status === true);
+
+    const counterPendingTasks = document.getElementById('numPendientes');
+    const counterCompletedTasks = document.getElementById('numCompletadas');
+
+    counterPendingTasks.textContent = tasksPending.length;
+    counterCompletedTasks.textContent = tasksCompleted.length;
+
+}
+
 function cleanHTML() {
-    
-    while(list.firstChild) {
+
+    while (list.firstChild) {
         list.removeChild(list.firstChild);
     }
 
