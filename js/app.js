@@ -1,9 +1,7 @@
-// Variables
 const formulario = document.getElementById("formulario");
 const list = document.getElementById("list");
 let tasks = [];
 
-// Eventos
 eventListeners();
 
 function eventListeners() {
@@ -12,11 +10,16 @@ function eventListeners() {
     // Load localStorage when DOM is ready
     document.addEventListener("DOMContentLoaded", () => {
         tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
         createHTML();
+
+        // When the DOM loads, we pass the tasks array to check if there are any
+        updateCounter(tasks);
     });
 }
 
 function addTask(e) {
+
     e.preventDefault();
 
     const formTask = document.getElementById("task").value;
@@ -39,6 +42,7 @@ function addTask(e) {
 
     formulario.reset();
 
+    updateCounter(tasks);
 
 }
 
@@ -83,8 +87,6 @@ function createHTML() {
 
             const li = document.createElement("li");
             li.classList.add("task-items")
-            //li.classList.add("task-textElement");
-            //li.textContent = task.formTask;
 
             const checkButton = document.createElement("input");
             checkButton.type = "checkbox";
@@ -94,7 +96,7 @@ function createHTML() {
             textElement.classList.add("task-textElement");
             textElement.textContent = task.formTask;
 
-            if(task.status) {
+            if (task.status) {
                 textElement.style.textDecoration = "line-through";
             }
 
@@ -107,18 +109,27 @@ function createHTML() {
                 if (checkButton.checked) {
                     textElement.style.textDecoration = "line-through";
                     task.status = true;
+
                 } else {
                     textElement.style.textDecoration = "none";
                     task.status = false;
-                }
 
+                }
                 // Save task status in localStorage
                 synchStorage();
+
+                // Update DOM Counter
+                const LS_tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                updateCounter(LS_tasks);
 
             }
 
             deleteButton.onclick = () => {
                 deleteTask(task.id);
+
+                // Update DOM Counter
+                const LS_tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                updateCounter(LS_tasks);
             }
 
 
@@ -135,9 +146,6 @@ function createHTML() {
     // Save tasks in localStorage
     synchStorage();
 
-    // Comprobar la propiedad status de todas las tareas
-    console.log(tasks);
-
 }
 
 function synchStorage() {
@@ -153,6 +161,24 @@ function changeStatus(task) {
 
     if (task.status === false) {
     }
+
+}
+
+// Counter functionality
+function updateCounter(tasks) {
+
+    let tasksPending = [];
+    let tasksCompleted = [];
+
+    tasksPending = tasks.filter(task => task.status === false);
+
+    tasksCompleted = tasks.filter(task => task.status === true);
+
+    const counterPendingTasks = document.getElementById('numPendientes');
+    const counterCompletedTasks = document.getElementById('numCompletadas');
+
+    counterPendingTasks.textContent = tasksPending.length;
+    counterCompletedTasks.textContent = tasksCompleted.length;
 
 }
 
